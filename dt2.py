@@ -13,17 +13,11 @@ class Node:
 
 def subtables(data, col, delete):
     dict = {}
-    #print('data',data)
     items = np.unique(data[:, col])
-    #print('items_unique',items,col)
-    #print('ishape',items.shape[0],1)
-    #print('dshape',data.shape[0])
     count = np.zeros((items.shape[0], 1), dtype=np.int32)    
-    #print('cnt',count)
     for x in range(items.shape[0]):
         for y in range(data.shape[0]):
-#	    print('x,y,data[y,col]',x,y,data[y,col]) 
- #           print('data[y, col] == items[x]',data[y, col],items[x])
+
             if data[y, col] == items[x]:
                 count[x] += 1
                 
@@ -37,7 +31,7 @@ def subtables(data, col, delete):
                 pos += 1       
         if delete:
             dict[items[x]] = np.delete(dict[items[x]], col, 1)
-    #print('items,dict',items,dict)    
+        
     return items, dict    
         
 def entropy(S):
@@ -51,7 +45,7 @@ def entropy(S):
     
     for x in range(items.shape[0]):
         counts[x] = sum(S == items[x]) / (S.size * 1.0)
-	#print('sum,x',x,sum(S == items[x]))
+	
 
     for count in counts:
         sums += -1 * count * math.log(count, 2)
@@ -66,9 +60,9 @@ def gain_ratio(data, col):
     
     for x in range(items.shape[0]):
         ratio = dict[items[x]].shape[0]/(total_size * 1.0)
-	#print('x,ratio,dict[items[x]][:, -1]',x,ratio,dict[items[x]][:, -1])
+	
         entropies[x] = ratio * entropy(dict[items[x]][:, -1])
-	#print('entropies[x]',entropies[x])
+	
         intrinsic[x] = ratio * math.log(ratio, 2)
         
     total_entropy = entropy(data[:, -1])
@@ -91,7 +85,7 @@ def create_node(data, metadata):
         gains[col] = gain_ratio(data, col)
         print('gains[col]',col,gains[col])
         split = np.argmax(gains)
-    #print('split',split)
+    
     node = Node(metadata[split])    
     metadata = np.delete(metadata, split, 0)    
     
@@ -110,7 +104,7 @@ def empty(size):
     return s
 
 def print_tree(node, level):
-   # print('n_ans',node.answer)
+   
     if node.answer != "":
         print (empty(level), node.answer)
         return
